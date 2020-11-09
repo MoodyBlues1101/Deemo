@@ -1,0 +1,46 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+
+
+    <context id="simple" targetRuntime="MyBatis3Simple">
+        <commentGenerator >
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--配置数据库连接 -->
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/test"
+                userId="root"
+                password="1331"
+        />
+
+
+        <!--生成bean文件地址 -->
+        <javaModelGenerator
+                targetPackage="com.deemo.entity"
+                targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimString" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成映射文件文件地址 -->
+        <sqlMapGenerator
+                targetPackage="mapper"
+                targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--生成DAO文件地址 -->
+        <javaClientGenerator
+                targetProject="com.deemo.dao"
+                type="XMLMAPPER" targetPackage="./src/main/mapper">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="tb_login" domainObjectName="User"/>
+    </context>
+</generatorConfiguration>

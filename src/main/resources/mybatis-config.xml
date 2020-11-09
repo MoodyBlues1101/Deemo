@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置延迟加载  -->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--延迟加载启动（懒加载）默认为false  -->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+        <!-- 积极加载，默认为true,设置为false按需加载  -->
+        <setting name="aggressiveLazyLoading" value="false"></setting>
+        <setting name="cacheEnabled" value="true"></setting>
+    </settings>
+    <!--别名设置  -->
+    <typeAliases>
+        <package name="com.deemo.entity" />
+    </typeAliases>
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+</configuration>

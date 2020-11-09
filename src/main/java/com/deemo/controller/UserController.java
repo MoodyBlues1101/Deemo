@@ -1,0 +1,86 @@
+package com.deemo.controller;
+
+
+import com.deemo.entity.User;
+import com.deemo.service.UserService;
+import com.deemo.utils.JsonMsg;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+@Controller
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+
+    @RequestMapping("/user")
+    public String selectAll(@RequestParam(value = "pn", defaultValue = "1")Integer pn, Model model) {
+        PageHelper.startPage(pn, 5);
+        //startPage 后面紧跟的就是一个分页查询
+        List<User> users = userService.selectAll();
+        //用pageinfo封装
+        PageInfo pages = new PageInfo(users, 5);
+        model.addAttribute("pageInfo", pages);
+        return "list";
+    }
+
+    /**
+     * 登录：跳转到登录页面
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(){
+        return "login";
+    }
+
+    /**
+     * 对登录页面输入的用户名和密码做简单的判断
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/dologin", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonMsg dologin(HttpServletRequest request) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        System.out.println(username + password);
+        if (!"admin1234".equals(username + password)) {
+            return JsonMsg.fail().addInfo("login_error", "输入账号用户名与密码不匹配，请重新输入！");
+        }
+        return JsonMsg.success();
+    }
+
+    @RequestMapping(value = "deleteByPrimaryKey")
+    public int deleteByPrimaryKey(Integer id) {
+        return userService.deleteByPrimaryKey(id);
+    }
+
+    @RequestMapping(value = "insert")
+    public int insert(User record) {
+        return userService.insert(record);
+    }
+
+    
+    public User selectByPrimaryKey(Integer id) {
+        return userService.selectByPrimaryKey(id);
+    }
+
+
+    
+    public int updateByPrimaryKey(User record) {
+        return userService.updateByPrimaryKey(record);
+    }
+}
