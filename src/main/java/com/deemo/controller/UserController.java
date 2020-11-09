@@ -72,13 +72,10 @@ public class UserController {
     public int insert(User record) {
         return userService.insert(record);
     }
-
     
     public User selectByPrimaryKey(Integer id) {
         return userService.selectByPrimaryKey(id);
     }
-
-
     
     public int updateByPrimaryKey(User record) {
         return userService.updateByPrimaryKey(record);
