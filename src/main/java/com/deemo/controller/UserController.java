@@ -32,7 +32,7 @@ public class UserController {
         //startPage 后面紧跟的就是一个分页查询
         List<User> users = userService.selectAll();
         //用pageinfo封装
-        PageInfo pages = new PageInfo(users, 5);
+        PageInfo<User> pages = new PageInfo(users, 5);
         model.addAttribute("pageInfo", pages);
         return "list";
     }
