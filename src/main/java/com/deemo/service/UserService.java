@@ -1,17 +1,17 @@
 package com.deemo.service;
 
 import com.deemo.entity.User;
-import org.apache.ibatis.annotations.Param;
+import com.deemo.utils.JsonMsg;
 
 import java.util.List;
 
 public interface UserService {
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
-    int insert(User record);
+    JsonMsg insert(User record);
 
-    User selectByPrimaryKey(Integer id);
+    User selectByPrimaryKey(String id);
 
     List<User> selectAll();
 

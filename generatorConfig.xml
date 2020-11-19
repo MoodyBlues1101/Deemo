@@ -41,6 +41,6 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_login" domainObjectName="User"/>
+        <table tableName="tbl_dept" domainObjectName="Dept"/>
     </context>
 </generatorConfiguration>

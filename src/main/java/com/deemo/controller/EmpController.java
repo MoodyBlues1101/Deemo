@@ -4,7 +4,6 @@ package com.deemo.controller;
 import com.deemo.entity.User;
 import com.deemo.service.UserService;
 import com.deemo.utils.JsonMsg;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-public class UserController {
+public class EmpController {
 
     @Autowired
     private UserService userService;
@@ -49,15 +48,17 @@ public class UserController {
 
     /**
      * 登录：跳转到登录页面
+     *
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(){
+    public String login() {
         return "login";
     }
 
     /**
      * 对登录页面输入的用户名和密码做简单的判断
+     *
      * @param request
      * @return
      */

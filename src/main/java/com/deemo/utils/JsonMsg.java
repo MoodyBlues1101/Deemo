@@ -8,7 +8,7 @@ import java.util.Map;
  * @date 2018/3/7.
  */
 public class JsonMsg {
-
+    //100-成功 200-失败
     private int code;
     private String msg;
     private Map<String, Object> extendInfo = new HashMap<>();

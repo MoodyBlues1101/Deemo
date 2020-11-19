@@ -1,7 +1,7 @@
 package com.deemo.entity;
 
 public class User {
-    private Integer id;
+    private String id;
 
     private String username;
 
@@ -10,17 +10,17 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String password) {
+    public User(String id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
