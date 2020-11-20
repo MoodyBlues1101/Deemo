@@ -35,7 +35,7 @@
     select
     e.emp_id, e.emp_name, e.emp_email, e.gender, d.dept_id, d.dept_name
     from tbl_emp e
-    left join tbl_dept d
+    left join tbl_dept d on d.dept_id = e.department_id
   </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

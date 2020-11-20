@@ -1,13 +1,12 @@
-package com.deemo.dao;
+package com.deemo.service;
 
 import com.deemo.entity.Emp;
 import com.deemo.entity.User;
-import org.springframework.stereotype.Repository;
+import com.deemo.utils.JsonMsg;
 
 import java.util.List;
 
-@Repository
-public interface EmpMapper {
+public interface EmpService {
 
     int deleteByPrimaryKey(int id);
 
@@ -22,5 +21,4 @@ public interface EmpMapper {
     Emp selectByPrimaryKeyWithDept(int id);
 
     List<Emp> selectAllWithDept();
-
 }

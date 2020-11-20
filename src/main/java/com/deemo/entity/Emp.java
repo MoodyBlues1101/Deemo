@@ -11,6 +11,8 @@ public class Emp {
 
     private String gender;
 
+    private Integer departmentId;
+
     private Dept dept;
 
     public Integer getEmpId() {
@@ -45,6 +47,14 @@ public class Emp {
         this.gender = gender;
     }
 
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public Dept getDept() {
         return dept;
     }
@@ -60,6 +70,7 @@ public class Emp {
                 ", empName='" + empName + '\'' +
                 ", empEmail='" + empEmail + '\'' +
                 ", gender='" + gender + '\'' +
+                ", departmentId=" + departmentId +
                 ", dept=" + dept +
                 '}';
     }

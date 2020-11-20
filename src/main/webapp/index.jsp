@@ -67,24 +67,26 @@
         </div>
     </div>
     <%--        显示--%>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-hover" id="user_table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>name</th>
-                    <th>password</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover" id="emps_table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>empName</th>
+                        <th>empEmail</th>
+                        <th>gender</th>
+                        <th>departmentName</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <%--        分页--%>
+        <%--        分页--%>
     <div class="row">
         <%--            分页文字信息--%>
         <div class="col-md-6" id="page_info_area">
@@ -104,13 +106,13 @@
 
     function to_page(pn) {
         $.ajax({
-            url: "${APP_PATH}/user",
+            url: "${APP_PATH}/emps",
             data: "pn=" + pn,
             type: "GET",
             success: function (result) {
                 console.log(result)
                 //解析并显示员工数据
-                build_user_table(result);
+                build_emps_table(result);
                 //解析并显示分页信息
                 build_page_info(result);
                 //解析并显示分页条
@@ -119,24 +121,28 @@
         });
     }
 
-    function build_user_table(result) {
+    function build_emps_table(result) {
         //清空table表格
-        $("#user_table tbody").empty();
-        var user = result.extendInfo.pageInfo.list;
-        $.each(user, function (index, item) {
-            var userIdTd = $("<td></td>").append(item.id);
-            var usernameTd = $("<td></td>").append(item.username);
-            var passwordTd = $("<td></td>").append(item.password);
+        $("#emps_table tbody").empty();
+        var emps = result.extendInfo.pageInfo.list;
+        $.each(emps, function (index, item) {
+            var empIdTd = $("<td></td>").append(item.empId);
+            var empNameTd = $("<td></td>").append(item.empName);
+            var empEmail = $("<td></td>").append(item.empEmail);
+            var gender = $("<td></td>").append(item.gender == "M" ? "男" : "女");
+            var deptName = $("<td></td>").append(item.dept.deptName);
             var editBtn = $("<button></button>").addClass("btn bg-primary btn-sm")
                 .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
             var delBtn = $("<button></button>").addClass("btn btn-danger btn-sm")
                 .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
-            var btn = $("<td></td>").append(editBtn).append("  ").append(delBtn);
-            $("<tr></tr>").append(userIdTd)
-                .append(usernameTd)
-                .append(passwordTd)
+            var btn = $("<td></td>").append(editBtn).append(" ").append(delBtn);
+            $("<tr></tr>").append(empIdTd)
+                .append(empNameTd)
+                .append(empEmail)
+                .append(gender)
+                .append(deptName)
                 .append(btn)
-                .appendTo("#user_table tbody")
+                .appendTo("#emps_table tbody")
         });
     }
 
@@ -166,8 +172,7 @@
                 to_page(1);
             });
             prePageLi.click(function () {
-                to_pag;
-                e(result.extendInfo.pageInfo.pageNum - 1);
+                to_page(result.extendInfo.pageInfo.pageNum - 1);
             });
         }
 

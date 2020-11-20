@@ -44,10 +44,10 @@ public class MapperTest {
 //        //从容器中获取mapper
 //        ioc.getBean(UserMapper.class);
 
+        System.out.println(deptMapper);
+        List<Dept> deptAll = deptMapper.findDeptAll2(1);
+        System.out.println(deptAll.toString());
 
-        System.out.println(empMapper);
-        Emp emp = empMapper.selectByPrimaryKeyWithDept(1);
-        System.out.println(emp.toString());
 
         System.out.println("————————+++---终---+++————————");
     }

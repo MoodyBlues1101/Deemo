@@ -1,6 +1,8 @@
 package com.deemo.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class Dept {
     private Integer deptId;
@@ -9,7 +11,7 @@ public class Dept {
 
     private String deptLeader;
 
-    private List<Emp> emps;
+    private List<Emp> emps = new ArrayList<>();
 
     public Integer getDeptId() {
         return deptId;

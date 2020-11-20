@@ -19,4 +19,8 @@ public interface DeptMapper {
     List<Dept> selectAll();
 
     int updateByPrimaryKey(Dept record);
+
+//    List<Dept> findDeptAll(int deptId);
+
+    List<Dept> findDeptAll2(int deptId);
 }
