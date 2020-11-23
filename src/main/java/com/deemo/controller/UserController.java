@@ -78,8 +78,6 @@ public class UserController {
         return userService.deleteByPrimaryKey(id);
     }
 
-    @RequestMapping(value = "insert", method = RequestMethod.POST)
-    @ResponseBody
     public JsonMsg insert(User record) {
         return userService.insert(record);
     }

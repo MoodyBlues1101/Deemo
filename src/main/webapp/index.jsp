@@ -15,36 +15,53 @@
 </head>
 <body>
 <!-- Modal -->
-<div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="empAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">用户注册</h4>
+                <h4 class="modal-title" id="myModalLabel">新增用户</h4>
             </div>
             <div class="modal-body">
                 <%--                表单内容--%>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Username</label>
+                        <label class="col-sm-2 control-label">EmpName</label>
                         <div class="col-sm-10">
-                            <input type="text" name="username" class="form-control" id="username_input"
-                                   placeholder="userName">
+                            <input type="text" name="empName" class="form-control" id="empName_input"
+                                   placeholder="empName">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Password</label>
+                        <label class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="password" name="password" class="form-control" id="password"
-                                   placeholder="Password">
+                            <input type="empEmail" name="empEmail" class="form-control" id="empEmail_add+input"
+                                   placeholder="email@moy.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">gender</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender1_add_input" value="M"> 男
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="gender2_add_input" value="F"> 女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">deptName</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="departmentId" id="dept_add_select"></select>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="user_save_btn">保存</button>
+                <button type="button" class="btn btn-primary" id="emp_save_btn">保存</button>
             </div>
         </div>
     </div>
@@ -60,13 +77,13 @@
         </div>
     </div>
     <%--        按钮--%>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-8">
-            <button class="btn bg-primary" id="user_add_modal">新增</button>
-            <button class="btn btn-danger">删除</button>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-8">
+                <button class="btn bg-primary" id="emp_add_modal">新增</button>
+                <button class="btn btn-danger">删除</button>
+            </div>
         </div>
-    </div>
-    <%--        显示--%>
+        <%--        显示--%>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-hover" id="emps_table">
@@ -207,21 +224,36 @@
         navEle.appendTo("#page_nav_area");
     }
 
-    $("#user_add_modal").click(function () {
-        $("#userAddModal").modal({
+    $("#emp_add_modal").click(function () {
+        getDepts();
+        $("#empAddModal").modal({
             backdrop: "static"
         });
-    })
+    });
 
-    $("#user_save_btn").click(function () {
+    function getDepts() {
+        $.ajax({
+            url: "${APP_PATH}/depts",
+            type: "GET",
+            success: function (result) {
+                $("#dept_add_select")
+                $.each(result.extendInfo.depts, function () {
+                    var optionElement = $("<option></option>").append(this.deptName).attr("value", this.deptId);
+                    optionElement.appendTo("#dept_add_select")
+                });
+            }
+        });
+    };
+
+    $("#emp_save_btn").click(function () {
         //将表单数据提交给服务器
         $.ajax({
             url: "${APP_PATH}/insert",
             type: "POST",
-            data: $("#userAddModal form").serialize(),
+            data: $("#empAddModal form").serialize(),
             success: function (result) {
                 alert(result.msg);
-                $("#userAddModal").modal('hide');
+                $("#empAddModal").modal('hide');
                 to_page(9999);
             }
         });

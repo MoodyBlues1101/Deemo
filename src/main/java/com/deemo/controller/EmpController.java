@@ -1,8 +1,10 @@
 package com.deemo.controller;
 
 
+import com.deemo.entity.Dept;
 import com.deemo.entity.Emp;
 import com.deemo.entity.User;
+import com.deemo.service.DeptService;
 import com.deemo.service.EmpService;
 import com.deemo.service.UserService;
 import com.deemo.utils.JsonMsg;
@@ -24,6 +26,8 @@ public class EmpController {
 
     @Autowired
     private EmpService empService;
+    @Autowired
+    private DeptService deptService;
 
     @RequestMapping("/emps")
     @ResponseBody
@@ -36,4 +40,17 @@ public class EmpController {
         return JsonMsg.success().addInfo("pageInfo", pages);
     }
 
+    @RequestMapping("/depts")
+    @ResponseBody
+    public JsonMsg findDept() {
+        List<Dept> depts = deptService.selectAll();
+        return JsonMsg.success().addInfo("depts", depts);
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonMsg insert(Emp emp) {
+        int i = empService.insert(emp);
+        return JsonMsg.success();
+    }
 }
