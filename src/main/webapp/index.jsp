@@ -29,15 +29,17 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">EmpName</label>
                         <div class="col-sm-10">
-                            <input type="text" name="empName" class="form-control" id="empName_input"
+                            <input type="text" name="empName" class="form-control" id="empName_add_input"
                                    placeholder="empName">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="empEmail" name="empEmail" class="form-control" id="empEmail_add+input"
+                            <input type="empEmail" name="empEmail" class="form-control" id="empEmail_add_input"
                                    placeholder="email@moy.com">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -245,7 +247,53 @@
         });
     };
 
+    function validate_add_form() {
+        //拿到数据 使用正则表达式
+        var empName = $("#empName_add_input").val();
+        var regName = /(^[a-z0-9_-]{6,16}$)|(^[\u2e80-\u9fff]{2,5})/;
+        if (!regName.test(empName)) {
+            //alert("请输入2-5位汉字或5-16数字字母组合");
+            show_validate_msg("#empName_add_input", "error", "请输入2-5位汉字或5-16数字字母组合");
+            return false;
+        } else {
+            show_validate_msg("#empName_add_input", "success", "");
+        }
+        ;
+
+        //校验邮箱信息
+        var email = $("#empEmail_add_input").val();
+        var regEmail = /^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/;
+        if (!regEmail.test(email)) {
+            //alert("邮箱格式不正确");
+            show_validate_msg("#empEmail_add_input", "error", "邮箱格式不正确");
+            return false;
+        } else {
+            show_validate_msg("#empEmail_add_input", "success", "");
+        }
+        ;
+        return true;
+    }
+
+    function show_validate_msg(ele, status, msg) {
+        //清除当前元素校验状态
+        $(ele).parent().removeClass("has-error has-success");
+        $(ele).next("span").text("");
+        if ("success" == status) {
+            $(ele).parent().addClass("has-success");
+            $(ele).next("span").text(msg);
+        } else if ("error" == status) {
+            $(ele).parent().addClass("has-error");
+            $(ele).next("span").text(msg);
+        }
+    };
+
     $("#emp_save_btn").click(function () {
+
+        //校验
+        if (!validate_add_form()) {
+            return false;
+        }
+
         //将表单数据提交给服务器
         $.ajax({
             url: "${APP_PATH}/insert",
