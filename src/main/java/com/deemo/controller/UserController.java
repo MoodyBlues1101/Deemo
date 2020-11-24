@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -25,9 +24,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @RequestMapping("/user")
-    public String selectAll(@RequestParam(value = "pn", defaultValue = "1")Integer pn, Model model) {
+    @ResponseBody
+    public JsonMsg findAllInJson(@RequestParam(value = "pn", defaultValue = "1") Integer pn) {
+        PageHelper.startPage(pn, 5);
+        //startPage 后面紧跟的就是一个分页查询
+        List<User> users = userService.selectAll();
+        //用pageinfo封装
+        PageInfo<User> pages = new PageInfo(users, 5);
+        return JsonMsg.success().addInfo("pageInfo", pages);
+    }
+
+    //废弃
+//    @RequestMapping("/user")
+    public String selectAll(@RequestParam(value = "pn", defaultValue = "1") Integer pn, Model model) {
         PageHelper.startPage(pn, 5);
         //startPage 后面紧跟的就是一个分页查询
         List<User> users = userService.selectAll();
@@ -64,19 +74,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "deleteByPrimaryKey")
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(String id) {
         return userService.deleteByPrimaryKey(id);
     }
 
-    @RequestMapping(value = "insert")
-    public int insert(User record) {
+    public JsonMsg insert(User record) {
         return userService.insert(record);
     }
-    
-    public User selectByPrimaryKey(Integer id) {
+
+    public User selectByPrimaryKey(String id) {
         return userService.selectByPrimaryKey(id);
     }
-    
+
     public int updateByPrimaryKey(User record) {
         return userService.updateByPrimaryKey(record);
     }

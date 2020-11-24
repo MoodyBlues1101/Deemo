@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deemo.dao.DeptMapper">
+    <resultMap id="LinkMap" type="com.deemo.entity.Dept">
+        <id column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="dept_leader" jdbcType="VARCHAR" property="deptLeader"/>
+    </resultMap>
+    <resultMap id="LinkMapNo2" type="com.deemo.entity.Dept">
+        <id column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="dept_leader" jdbcType="VARCHAR" property="deptLeader"/>
+        <collection property="emps" ofType="com.deemo.entity.Emp" select="findEmpById" column="dept_id"/>
+    </resultMap>
+    <select id="findEmpById" parameterType="java.lang.Integer" resultType="com.deemo.entity.Emp">
+    select emp_id, emp_name, emp_email, gender, department_id
+    from tbl_emp where department_id = #{departmentId}
+  </select>
+
+    <select id="findDeptAll2" parameterType="java.lang.Integer" resultMap="LinkMapNo2">
+    select dept_id, dept_name, dept_leader
+    from tbl_dept where dept_id = #{deptId}
+  </select>
+
+
+    <resultMap id="EmpMap" type="com.deemo.entity.Emp">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_dept
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.deemo.entity.Dept">
+    insert into tbl_dept (dept_name, dept_leader
+      )
+    values (#{deptName,jdbcType=VARCHAR}, #{deptLeader,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.deemo.entity.Dept">
+    update tbl_dept
+    set dept_name = #{deptName,jdbcType=VARCHAR},
+      dept_leader = #{deptLeader,jdbcType=VARCHAR}
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="LinkMap">
+    select dept_id, dept_name, dept_leader
+    from tbl_dept
+    where dept_id = #{deptId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="LinkMap">
+    select dept_id, dept_name, dept_leader
+    from tbl_dept
+  </select>
+
+
+    <!--    &lt;!&ndash;    一对多查询&ndash;&gt;-->
+    <!--    <resultMap id="LinkMapNo1" type="com.deemo.entity.Dept">-->
+    <!--        <id column="dept_id" jdbcType="INTEGER" property="deptId"/>-->
+    <!--        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>-->
+    <!--        <result column="dept_leader" jdbcType="VARCHAR" property="deptLeader"/>-->
+    <!--        <collection property="emps" ofType="com.deemo.entity.Emp">-->
+    <!--            <id column="emp_id" jdbcType="INTEGER" property="empId"/>-->
+    <!--            <result column="emp_name" jdbcType="VARCHAR" property="empName"/>-->
+    <!--            <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>-->
+    <!--            <result column="gender" jdbcType="CHAR" property="gender"/>-->
+    <!--            <result column="department_id" jdbcType="INTEGER" property="departmentId"/>-->
+    <!--        </collection>-->
+    <!--    </resultMap>-->
+    <!--    &lt;!&ndash;    一对多查询语句&ndash;&gt;-->
+    <!--    <select id="findDeptAll" parameterType="java.lang.Integer" resultMap="LinkMapNo1">-->
+    <!--    select *-->
+    <!--    from tbl_dept d-->
+    <!--    left join tbl_emp e on d.dept_id = e.department_id-->
+    <!--    where d.dept_id = #{dept_id}-->
+    <!--  </select>-->
+</mapper>

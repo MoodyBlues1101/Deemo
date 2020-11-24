@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deemo.dao.EmpMapper">
+    <resultMap id="BaseResultMap" type="com.deemo.entity.Emp">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
+    </resultMap>
+
+    <resultMap id="WithDeptMap" type="com.deemo.entity.Emp">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_email" jdbcType="VARCHAR" property="empEmail"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
+        <association property="dept" javaType="com.deemo.entity.Dept">
+            <id column="dept_id" property="deptId"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+
+
+    <!--  Emp selectByPrimaryKeyWithDept(int id); -->
+    <!--  List<Emp> selectAllWithDept();          -->
+    <select id="selectByPrimaryKeyWithDept" parameterType="java.lang.Integer" resultMap="WithDeptMap">
+    select
+    e.emp_id, e.emp_name, e.emp_email, e.gender, d.dept_id, d.dept_name
+    from tbl_emp e
+    left join tbl_dept d on d.dept_id = e.department_id
+    where e.emp_id = #{empId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAllWithDept" resultMap="WithDeptMap">
+    select
+    e.emp_id, e.emp_name, e.emp_email, e.gender, d.dept_id, d.dept_name
+    from tbl_emp e
+    left join tbl_dept d on d.dept_id = e.department_id
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_emp
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.deemo.entity.Emp">
+    insert into tbl_emp (emp_name, emp_email,
+      gender, department_id)
+    values (#{empName,jdbcType=VARCHAR}, #{empEmail,jdbcType=VARCHAR},
+      #{gender,jdbcType=CHAR}, #{departmentId,jdbcType=INTEGER})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.deemo.entity.Emp">
+    update tbl_emp
+    set emp_name = #{empName,jdbcType=VARCHAR},
+      emp_email = #{empEmail,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      department_id = #{departmentId,jdbcType=INTEGER}
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select emp_id, emp_name, emp_email, gender, department_id
+    from tbl_emp
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select emp_id, emp_name, emp_email, gender, department_id
+    from tbl_emp
+  </select>
+    <select id="checkName" resultMap="BaseResultMap">
+    select emp_id, emp_name, emp_email, gender, department_id
+    from tbl_emp
+    where emp_name = #{empName}
+    limit 1
+  </select>
+</mapper>
