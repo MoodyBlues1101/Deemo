@@ -23,4 +23,5 @@ public interface EmpMapper {
 
     List<Emp> selectAllWithDept();
 
+    Emp checkName(String empName);
 }

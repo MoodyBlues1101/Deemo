@@ -46,7 +46,7 @@
                         <label class="col-sm-2 control-label">gender</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="gender" id="gender1_add_input" value="M"> 男
+                                <input type="radio" name="gender" id="gender1_add_input" value="M" checked> 男
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" name="gender" id="gender2_add_input" value="F"> 女
@@ -112,34 +112,36 @@
         </div>
         <%--            分页条信息--%>
         <div class="col-md-6" id="page_nav_area">
-
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     //1 界面加载完成以后，再发送ajax请求拿到数据
     $(function () {
-        //去首页
+        //拿到分页信息，并跳转到首页
         to_page(1);
     });
 
+    //返回指定页数的页面数据
     function to_page(pn) {
         $.ajax({
             url: "${APP_PATH}/emps",
             data: "pn=" + pn,
             type: "GET",
             success: function (result) {
-                console.log(result)
-                //解析并显示员工数据
+                console.log(result);
+                //1，解析并显示员工数据
                 build_emps_table(result);
-                //解析并显示分页信息
+                //2，解析并显示分页信息
                 build_page_info(result);
-                //解析并显示分页条
+                //3，解析并显示分页条
                 build_page_nav(result);
             }
         });
     }
 
+    //1，解析并显示员工数据
     function build_emps_table(result) {
         //清空table表格
         $("#emps_table tbody").empty();
@@ -173,7 +175,6 @@
             result.extendInfo.pageInfo.pageNum + "页,总" +
             result.extendInfo.pageInfo.pages + "页,总" +
             result.extendInfo.pageInfo.total + "条记录")
-
     }
 
     //解析显示分页条
@@ -194,7 +195,6 @@
                 to_page(result.extendInfo.pageInfo.pageNum - 1);
             });
         }
-
         var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
         var lastPageLi = $("<li></li>").append($("<a></a>").append("尾页").attr("href", "#"));
         if (result.extendInfo.pageInfo.hasNextPage == false) {
@@ -208,7 +208,6 @@
                 to_page(result.extendInfo.pageInfo.pageNum + 1)
             });
         }
-
         ul.append((firstPageLi)).append(prePageLi);
         $.each(result.extendInfo.pageInfo.navigatepageNums, function (index, item) {
             var numLi = $("<li></li>").append($("<a></a>").append(item));
@@ -221,12 +220,20 @@
             ul.append(numLi);
         });
         ul.append(nextPageLi).append(lastPageLi);
-
         var navEle = $("<nav></nav>").append(ul);
         navEle.appendTo("#page_nav_area");
     }
 
+    function reset_form(ele) {
+        $(ele)[0].reset();
+        $(ele).find("*").removeClass("has-error has-success");
+        $(ele).find(".help-block").text("");
+    }
+
+
     $("#emp_add_modal").click(function () {
+        //清除表单数据 完全
+        reset_form("#empAddModal form")
         getDepts();
         $("#empAddModal").modal({
             backdrop: "static"
@@ -247,6 +254,7 @@
         });
     };
 
+    //校验用户名邮箱格式
     function validate_add_form() {
         //拿到数据 使用正则表达式
         var empName = $("#empName_add_input").val();
@@ -259,7 +267,6 @@
             show_validate_msg("#empName_add_input", "success", "");
         }
         ;
-
         //校验邮箱信息
         var email = $("#empEmail_add_input").val();
         var regEmail = /^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/;
@@ -274,6 +281,7 @@
         return true;
     }
 
+    //输入框下显示提示信息
     function show_validate_msg(ele, status, msg) {
         //清除当前元素校验状态
         $(ele).parent().removeClass("has-error has-success");
@@ -287,10 +295,36 @@
         }
     };
 
+    //用户名查重
+    $("#empName_add_input").change(function () {
+        //发送ajax请求校验用户名是否重复
+        var empName = this.value;
+        $.ajax({
+            url: "${APP_PATH}/checkName",
+            data: "empName=" + empName,
+            type: "POST",
+            success: function (result) {
+                if (result.code == 100) {
+                    show_validate_msg("#empName_add_input", "success", "用户名可用")
+                    $("#emp_save_btn").attr("ajax-va", "success")
+                } else {
+                    show_validate_msg("#empName_add_input", "error", result.extendInfo.va_msg)
+                    $("#emp_save_btn").attr("ajax-va", "error")
+                }
+            }
+        })
+    });
+
+    //点击保存
     $("#emp_save_btn").click(function () {
 
-        //校验
+        //用户名邮箱的格式校验
         if (!validate_add_form()) {
+            return false;
+        }
+
+        //用户名查重
+        if ($(this).attr("ajax-va") == "error") {
             return false;
         }
 

@@ -21,4 +21,6 @@ public interface EmpService {
     Emp selectByPrimaryKeyWithDept(int id);
 
     List<Emp> selectAllWithDept();
+
+    boolean checkName(String empName);
 }

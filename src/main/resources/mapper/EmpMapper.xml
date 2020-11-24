@@ -65,4 +65,10 @@
     select emp_id, emp_name, emp_email, gender, department_id
     from tbl_emp
   </select>
+    <select id="checkName" resultMap="BaseResultMap">
+    select emp_id, emp_name, emp_email, gender, department_id
+    from tbl_emp
+    where emp_name = #{empName}
+    limit 1
+  </select>
 </mapper>

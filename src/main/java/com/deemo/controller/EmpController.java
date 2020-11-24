@@ -53,4 +53,22 @@ public class EmpController {
         int i = empService.insert(emp);
         return JsonMsg.success();
     }
+
+    @ResponseBody
+    @RequestMapping("/checkName")
+    public JsonMsg checkName(@RequestParam("empName") String empName) {
+        //先判断用户名是否是合法的表达式
+        String regx = "(^[a-z0-9_-]{6,16}$)|(^[\\u2e80-\\u9fff]{2,5})";
+        //true表示匹配成功，false表示失败
+        if (!empName.matches(regx)) {
+            return JsonMsg.fail().addInfo("va_msg", "请输入2-5位汉字或5-16数字字母组合");
+        }
+        //true表示没有重复
+        boolean b = empService.checkName(empName);
+        if (b) {
+            return JsonMsg.success();
+        } else {
+            return JsonMsg.fail().addInfo("va_msg", "用户名不可用");
+        }
+    }
 }

@@ -51,4 +51,11 @@ public class EmpServiceImpl implements EmpService {
     public List<Emp> selectAllWithDept() {
         return empMapper.selectAllWithDept();
     }
+
+    @Override
+    public boolean checkName(String empName) {
+        Emp emp = empMapper.checkName(empName);
+        boolean b = (emp == null) ? true : false;
+        return b;
+    }
 }

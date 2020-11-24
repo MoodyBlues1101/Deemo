@@ -45,8 +45,8 @@ public class MapperTest {
 //        ioc.getBean(UserMapper.class);
 
         System.out.println(deptMapper);
-        List<Dept> deptAll = deptMapper.findDeptAll2(1);
-        System.out.println(deptAll.toString());
+        Emp emp = empMapper.checkName("123");
+        System.out.println(emp.toString());
 
 
         System.out.println("————————+++---终---+++————————");
